@@ -2,9 +2,7 @@
 
 
 import machine
-import bitbangio
 import time as utime
-import digitalio
 from OV5642_reg import *
 
 OV2640 = 0
