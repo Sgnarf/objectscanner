@@ -1,7 +1,7 @@
 #Based on https://github.com/teco-kit/Arducam_OV2640_Python_Package_Raspberry_Pi_Pico/blob/main/Pico/Code/Arducam_OV2640.py but rewritten to use standard libraries instead of AdaFruit ones
 
 
-import board
+import machine
 import bitbangio
 import time as utime
 import digitalio
@@ -151,14 +151,17 @@ class ArducamClass(object):
     def __init__(self, Type, mode=YUV):
         self.CameraMode = mode
         self.CameraType = Type
-        self.SPI_CS = digitalio.DigitalInOut(board.GP5)
+        #self.SPI_CS = digitalio.DigitalInOut(board.GP5)
+        self.SPI_CS = machine.Pin(5)
         self.SPI_CS.direction = digitalio.Direction.OUTPUT
         self.I2cAddress = 0x30
-        self.spi = busio.SPI(clock=board.GP2, MOSI=board.GP3, MISO=board.GP4)
+        #self.spi = machine.SPI(clock=board.GP2, MOSI=board.GP3, MISO=board.GP4)
+        self.spi = machine.SPI(0, baudrate=4000000, polarity=0, phase=0, bits=8, sck=machine.Pin(2), mosi=machine.Pin(3), miso=machine.Pin(4))
         while not self.spi.try_lock():
             pass
-        self.spi.configure(baudrate=4000000, polarity=0, phase=0, bits=8)
-        self.i2c = bitbangio.I2C(scl=board.GP9, sda=board.GP8, frequency=1000000)
+        #self.spi.configure(baudrate=4000000, polarity=0, phase=0, bits=8)
+        #self.i2c = bitbangio.I2C(scl=board.GP9, sda=board.GP8, frequency=1000000)
+        self.i2c = machine.I2C(-1, scl=machine.Pin(9), sda=machine.Pin(8), freq=1000000)
         while not self.i2c.try_lock():
             pass
         print(self.i2c.scan())
