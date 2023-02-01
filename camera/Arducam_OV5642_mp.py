@@ -151,7 +151,8 @@ class ArducamClass(object):
         self.CameraType = Type
         #self.SPI_CS = digitalio.DigitalInOut(board.GP5)
         self.SPI_CS = machine.Pin(5)
-        self.SPI_CS.direction = digitalio.Direction.OUTPUT
+        #self.SPI_CS.direction = digitalio.Direction.OUTPUT
+        self.SPI_CS = machine.Pin(5, machine.Pin.OUT)
         self.I2cAddress = 0x30
         #self.spi = machine.SPI(clock=board.GP2, MOSI=board.GP3, MISO=board.GP4)
         self.spi = machine.SPI(0, baudrate=4000000, polarity=0, phase=0, bits=8, sck=machine.Pin(2), mosi=machine.Pin(3), miso=machine.Pin(4))
