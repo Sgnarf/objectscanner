@@ -2,7 +2,6 @@
 
 
 import board
-import busio
 import bitbangio
 import time as utime
 import digitalio
