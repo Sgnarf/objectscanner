@@ -5,7 +5,7 @@ import machine
 import time as utime
 from OV5642_reg import *
 
-OV2640 = 0
+OV5642 = 0
 
 MAX_FIFO_SIZE = 0x7FFFFF
 ARDUCHIP_FRAMES = 0x01
@@ -17,15 +17,15 @@ CAP_DONE_MASK = 0x08
 OV5642_CHIPID_HIGH = 0x300a
 OV5642_CHIPID_LOW = 0x300b
 
-OV2640_160x120 = 0
-OV2640_176x144 = 1
-OV2640_320x240 = 2
-OV2640_352x288 = 3
-OV2640_640x480 = 4
-OV2640_800x600 = 5
-OV2640_1024x768 = 6
-OV2640_1280x1024 = 7
-OV2640_1600x1200 = 8
+OV5642_160x120 = 0
+OV5642_176x144 = 1
+OV5642_320x240 = 2
+OV5642_352x288 = 3
+OV5642_640x480 = 4
+OV5642_800x600 = 5
+OV5642_1024x768 = 6
+OV5642_1280x1024 = 7
+OV5642_1600x1200 = 8
 
 Advanced_AWB = 0
 Simple_AWB = 1
@@ -170,16 +170,16 @@ class ArducamClass(object):
 
     def Camera_Detection(self):
         while True:
-            if self.CameraType == OV2640:
+            if self.CameraType == OV5642:
                 self.I2cAddress = 0x30
                 self.wrSensorReg8_8(0xff, 0x01)
                 id_h = self.rdSensorReg8_8(0x0a)
                 id_l = self.rdSensorReg8_8(0x0b)
                 if ((id_h == 0x26) and ((id_l == 0x40) or (id_l == 0x42))):
-                    print('CameraType is OV2640')
+                    print('CameraType is OV5642')
                     break
                 else:
-                    print('Can\'t find OV2640 module')
+                    print('Can\'t find OV5642 module')
             utime.sleep(1)
 
     def Set_Camera_mode(self, mode):
@@ -238,24 +238,24 @@ class ArducamClass(object):
     def Camera_Init(self, mode=None):
         if mode is not None:
             self.Set_Camera_mode(mode)
-        if self.CameraType == OV2640:
+        if self.CameraType == OV5642:
             if self.CameraMode == JPEG:
                 print("JPEG")
                 self.wrSensorReg8_8(0xff, 0x01)
                 self.wrSensorReg8_8(0x12, 0x80)
                 utime.sleep(0.1)
-                self.wrSensorRegs8_8(OV2640_JPEG_INIT)
-                self.wrSensorRegs8_8(OV2640_YUV422)
-                self.wrSensorRegs8_8(OV2640_JPEG)
+                self.wrSensorRegs8_8(OV5642_JPEG_INIT)
+                self.wrSensorRegs8_8(OV5642_YUV422)
+                self.wrSensorRegs8_8(OV5642_JPEG)
                 self.wrSensorReg8_8(0xff, 0x01)
                 self.wrSensorReg8_8(0x15, 0x00)
-                self.wrSensorRegs8_8(OV2640_320x240_JPEG)
+                self.wrSensorRegs8_8(OV5642_320x240_JPEG)
             elif self.CameraMode == YUV:
                 print("YUV")
                 self.wrSensorReg8_8(0xff, 0x01)
                 self.wrSensorReg8_8(0x12, 0x80)
                 utime.sleep(0.1)
-                self.wrSensorRegs8_8(OV2640_YUV_96x96)
+                self.wrSensorRegs8_8(OV5642_YUV_96x96)
         else:
             pass
 
@@ -346,34 +346,34 @@ class ArducamClass(object):
         temp = self.Spi_read(addr)[0]
         self.Spi_write(addr, temp & (~bit))
 
-    def OV2640_set_JPEG_size(self, size):
+    def OV5642_set_JPEG_size(self, size):
         if self.CameraMode == YUV:
             print("Mode is YUV. [set_JPEG_size] not possible. Please init Camera with mode=JPEG")
             return
 
-        if size == OV2640_160x120:
-            self.wrSensorRegs8_8(OV2640_160x120_JPEG)
-        elif size == OV2640_176x144:
-            self.wrSensorRegs8_8(OV2640_176x144_JPEG)
-        elif size == OV2640_320x240:
-            self.wrSensorRegs8_8(OV2640_320x240_JPEG)
-        elif size == OV2640_352x288:
-            self.wrSensorRegs8_8(OV2640_352x288_JPEG)
-        elif size == OV2640_640x480:
-            self.wrSensorRegs8_8(OV2640_640x480_JPEG)
-        elif size == OV2640_800x600:
-            self.wrSensorRegs8_8(OV2640_800x600_JPEG)
-        elif size == OV2640_1024x768:
-            self.wrSensorRegs8_8(OV2640_1024x768_JPEG)
-        elif size == OV2640_1280x1024:
-            self.wrSensorRegs8_8(OV2640_1280x1024_JPEG)
-        elif size == OV2640_1600x1200:
-            self.wrSensorRegs8_8(OV2640_1600x1200_JPEG)
+        if size == OV5642_160x120:
+            self.wrSensorRegs8_8(OV5642_160x120_JPEG)
+        elif size == OV5642_176x144:
+            self.wrSensorRegs8_8(OV5642_176x144_JPEG)
+        elif size == OV5642_320x240:
+            self.wrSensorRegs8_8(OV5642_320x240_JPEG)
+        elif size == OV5642_352x288:
+            self.wrSensorRegs8_8(OV5642_352x288_JPEG)
+        elif size == OV5642_640x480:
+            self.wrSensorRegs8_8(OV5642_640x480_JPEG)
+        elif size == OV5642_800x600:
+            self.wrSensorRegs8_8(OV5642_800x600_JPEG)
+        elif size == OV5642_1024x768:
+            self.wrSensorRegs8_8(OV5642_1024x768_JPEG)
+        elif size == OV5642_1280x1024:
+            self.wrSensorRegs8_8(OV5642_1280x1024_JPEG)
+        elif size == OV5642_1600x1200:
+            self.wrSensorRegs8_8(OV5642_1600x1200_JPEG)
             print("Max")
         else:
-            self.wrSensorRegs8_8(OV2640_320x240_JPEG)
+            self.wrSensorRegs8_8(OV5642_320x240_JPEG)
 
-    def OV2640_set_Light_Mode(self, result):
+    def OV5642_set_Light_Mode(self, result):
         if result == Auto:
             self.wrSensorReg8_8(0xff, 0x00)
             self.wrSensorReg8_8(0xc7, 0x00)
@@ -405,7 +405,7 @@ class ArducamClass(object):
             self.wrSensorReg8_8(0xff, 0x00)
             self.wrSensorReg8_8(0xc7, 0x00)
 
-    def OV2640_set_Color_Saturation(self, Saturation):
+    def OV5642_set_Color_Saturation(self, Saturation):
         if Saturation == Saturation2:
             self.wrSensorReg8_8(0xff, 0x00)
             self.wrSensorReg8_8(0x7c, 0x00)
@@ -442,7 +442,7 @@ class ArducamClass(object):
             self.wrSensorReg8_8(0x7d, 0x28)
             self.wrSensorReg8_8(0x7d, 0x28)
 
-    def OV2640_set_Brightness(self, Brightness):
+    def OV5642_set_Brightness(self, Brightness):
         if Brightness == Brightness2:
             self.wrSensorReg8_8(0xff, 0x00)
             self.wrSensorReg8_8(0x7c, 0x00)
@@ -479,7 +479,7 @@ class ArducamClass(object):
             self.wrSensorReg8_8(0x7d, 0x00)
             self.wrSensorReg8_8(0x7d, 0x00)
 
-    def OV2640_set_Contrast(self, Contrast):
+    def OV5642_set_Contrast(self, Contrast):
         if Contrast == Contrast2:
             self.wrSensorReg8_8(0xff, 0x00)
             self.wrSensorReg8_8(0x7c, 0x00)
@@ -526,7 +526,7 @@ class ArducamClass(object):
             self.wrSensorReg8_8(0x7d, 0x34)
             self.wrSensorReg8_8(0x7d, 0x06)
 
-    def OV2640_set_Special_effects(self, Special_effect):
+    def OV5642_set_Special_effects(self, Special_effect):
         if Special_effect == Antique:
             self.wrSensorReg8_8(0xff, 0x00)
             self.wrSensorReg8_8(0x7c, 0x00)
@@ -584,7 +584,7 @@ class ArducamClass(object):
             self.wrSensorReg8_8(0x7d, 0x80)
             self.wrSensorReg8_8(0x7d, 0x80)
 
-    def OV2640_set_JPEG_Compression(self, compression):
+    def OV5642_set_JPEG_Compression(self, compression):
         '''
             compression int 0 - 5
         '''
@@ -610,6 +610,3 @@ class ArducamClass(object):
         elif compression == Compression_Full:
             self.wrSensorReg8_8(0xff, 0x00)
             self.wrSensorReg8_8(0x44, 0xff)
-
-
-
