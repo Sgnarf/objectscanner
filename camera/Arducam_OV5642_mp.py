@@ -290,10 +290,10 @@ class ArducamClass(object):
         return value & bit
 
     def SPI_CS_LOW(self):
-        self.SPI_CS.value = False
+        self.SPI_CS.value(0)
 
     def SPI_CS_HIGH(self):
-        self.SPI_CS.value = True
+        self.SPI_CS.value(1)
 
     def set_fifo_burst(self):
         buffer = bytearray(1)
